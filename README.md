@@ -1,69 +1,28 @@
-# React + TypeScript + Vite
+# Club-Sorter-WS
+![](https://img.shields.io/github/repo-size/timburr1/club-sorter-ws)
+![](https://img.shields.io/github/contributors/timburr1/club-sorter-ws)
+![](https://img.shields.io/github/last-commit/timburr1/club-sorter-ws)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+DESCRIPTION COMING SOON
 
-Currently, two official plugins are available:
+## Prerequisites
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [**Node.js**](https://nodejs.org/en/download/package-manager/)
+- [**Visual Studio Code**](https://code.visualstudio.com/)
 
-## Expanding the ESLint configuration
+Open this project in VS Code. Launch a new terminal, and run
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+$ npm install
+$ npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Some helpful VSCode extensions:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- ESLint
+- npm Intellisense
+- Azure App Service
+- Prettier (File -> Preferences -> Settings, enable 'Format on Save' and 'Prettier: Require Config')
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Other useful resources:  
+[CI](https://github.com/actions/starter-workflows/blob/master/ci/azure.yml)/[CD](https://docs.microsoft.com/en-us/azure/app-service/deploy-continuous-deployment) with Github
