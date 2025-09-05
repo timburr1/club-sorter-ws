@@ -113,6 +113,8 @@ function App() {
               1. Upload Clubs CSV, expected format:
               <br />
               ClubName, Capacity
+              <br />
+              (Do not include a header row, please see this <a href="/clubs.csv">example</a>).
             </label>
             <br />
             <input
@@ -130,6 +132,8 @@ function App() {
               <br />
               Timestamp, Email, LastName, FirstName, Grade, Choice1, Choice2,
               Choice3
+              <br />
+              (Do not include a header row, please see this <a href="/votes.csv">example</a>).
             </label>
             <br />
             <input
@@ -168,8 +172,9 @@ function App() {
             ))}
           </div>
         )}
-      </main>
-    </div>
+      </main>      
+      <footer>This software is provided for free. It will not save any data that you input, but otherwise it comes without any guarantees whatsoever. If you have questions or concerns, please email me at the reverse of moc.liamg@rrub.r.mit.</footer> 
+    </div>       
   );
 }
 
