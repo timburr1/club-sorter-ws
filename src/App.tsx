@@ -3,30 +3,19 @@ import "./App.css";
 
 // Define types for our data structures
 type Student = string[]; // [Timestamp, Email, LastName, FirstName, Grade, Choice1, Choice2, Choice3]
-/*
-type Club = {
-  name: string;
-  capacity: number;
-}; */
 type ClubMap = Map<string, number>; // Map<ClubName, Capacity>
 type ClubAssignments = {
   [clubName: string]: Student[];
-};
-type ClubVotes = {
-  [clubName: string]: number;
 };
 
 function App() {
   // State for club data, student data, and final assignments
   const [clubs, setClubs] = useState<ClubMap | null>(null);
   const [students, setStudents] = useState<Student[] | null>(null);
-  const [clubAssignments, setClubAssignments] =
-    useState<ClubAssignments | null>(null);
+  const [clubAssignments, setClubAssignments] = useState<ClubAssignments | null>(null);
 
   // Handler for the clubs CSV file
-  const handleClubsFileChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleClubsFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
@@ -35,9 +24,9 @@ function App() {
       const text = e.target?.result as string;
       if (text) {
         const clubMap: ClubMap = new Map();
-        const lines = text.trim().split("\n");
-        lines.forEach((line) => {
-          const [name, capacityStr] = line.split(",");
+        const lines = text.trim().split('\n');
+        lines.forEach(line => {
+          const [name, capacityStr] = line.split(',');
           const capacity = parseInt(capacityStr?.trim(), 10);
           if (name && !isNaN(capacity)) {
             clubMap.set(name.trim(), capacity);
@@ -50,9 +39,7 @@ function App() {
   };
 
   // Handler for the student votes CSV file
-  const handleStudentsFileChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleStudentsFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
@@ -60,10 +47,7 @@ function App() {
     reader.onload = (e: ProgressEvent<FileReader>) => {
       const text = e.target?.result as string;
       if (text) {
-        const studentList: Student[] = text
-          .trim()
-          .split("\n")
-          .map((line) => line.split(","));
+        const studentList: Student[] = text.trim().split('\n').map(line => line.split(','));
         setStudents(studentList);
       }
     };
@@ -77,55 +61,44 @@ function App() {
       return;
     }
 
-    const clubVotes: ClubVotes = {};
-    const clubList = Array.from(clubs.keys());
-
-    // Count votes for each club
-    students.forEach((student) => {
-      for (let i = 5; i <= 7; i++) {
-        // Choices are in indices 5, 6, and 7
-        const choice = student[i]?.trim();
-        if (choice && clubs.has(choice)) {
-          // Only count votes for valid clubs
-          clubVotes[choice] = (clubVotes[choice] || 0) + 1;
-        }
-      }
-    });
-
-    // Sort clubs by popularity (least to most)
-    const sortedClubs = clubList
-      .slice()
-      .sort((a, b) => (clubVotes[a] || 0) - (clubVotes[b] || 0));
-
+    // Initialize assignments map with empty arrays for each club
     const assignments: ClubAssignments = {};
-    let remainingStudents: Student[] = [...students];
-
-    sortedClubs.forEach((clubName) => {
+    const clubList = Array.from(clubs.keys());
+    clubList.forEach(clubName => {
       assignments[clubName] = [];
-      const maxStudents = clubs.get(clubName) || 0;
-      let studentsFound = 0;
-
-      // Iterate through 1st, 2nd, and 3rd choices
-      for (let choiceIndex = 5; choiceIndex <= 7; choiceIndex++) {
-        let studentIndex = 0;
-        while (
-          studentIndex < remainingStudents.length &&
-          studentsFound < maxStudents
-        ) {
-          if (
-            remainingStudents[studentIndex][choiceIndex]?.trim() === clubName
-          ) {
-            assignments[clubName].push(remainingStudents[studentIndex]);
-            remainingStudents.splice(studentIndex, 1);
-            studentsFound++;
-          } else {
-            studentIndex++;
-          }
-        }
-      }
     });
 
-    assignments["Remainder"] = remainingStudents;
+    let unassignedStudents: Student[] = [...students];
+
+    // Process assignments in three rounds (1st, 2nd, 3rd choice)
+    for (let choiceIndex = 5; choiceIndex <= 7; choiceIndex++) {
+      const studentsStillUnassigned: Student[] = [];
+      
+      unassignedStudents.forEach(student => {
+        const choice = student[choiceIndex]?.trim();
+        const clubCapacity = clubs.get(choice);
+        
+        // Check if the student's choice is a valid club and has space
+        if (choice && assignments[choice] && clubCapacity !== undefined) {
+          if (assignments[choice].length < clubCapacity) {
+            // Assign student to the club
+            assignments[choice].push(student);
+          } else {
+            // If the club is full, add the student to the list for the next round
+            studentsStillUnassigned.push(student);
+          }
+        } else {
+          // If the choice is invalid or not found in the club list, carry the student to the next round
+          studentsStillUnassigned.push(student);
+        }
+      });
+      
+      // The students for the next round are the ones who couldn't be placed in this round
+      unassignedStudents = studentsStillUnassigned;
+    }
+
+    // Any students left over are the remainder
+    assignments['Remainder'] = unassignedStudents;
     setClubAssignments(assignments);
   };
 
