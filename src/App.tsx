@@ -173,7 +173,7 @@ function App() {
           </div>
         )}
       </main>      
-      <footer>This software is provided for free. It will not save any data that you input, but otherwise it comes without any guarantees whatsoever. If you have questions or concerns, please email me at the reverse of moc.liamg@rrub.r.mit.</footer> 
+      <footer>This software is provided for free. It will not save any data that you input, but otherwise it comes without any guarantees whatsoever. If you have questions, comments, or concerns, please email me at the reverse of moc.liamg@rrub.r.mit.</footer> 
     </div>       
   );
 }
